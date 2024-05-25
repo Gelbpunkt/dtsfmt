@@ -141,30 +141,22 @@ fn traverse(
                 writer.push('\n');
             }
         }
-        "labeled_item" => {
-            cursor.goto_first_child();
-            print_indent(writer, ctx);
-            writer.push_str(get_text(source, cursor));
-            writer.push_str(": ");
-
-            while cursor.goto_next_sibling() {
-                traverse(writer, &source, cursor, ctx);
-            }
-
-            cursor.goto_parent();
-        }
         "node" => {
-            // If the previous node is a labeled_item, then the labeled_item
-            // will contain the indentation rather than the node.
-            if lookbehind(cursor).map_or(false, |n| n.kind() != ":") {
-                print_indent(writer, ctx);
+            print_indent(writer, ctx);
+
+            // Node label
+            cursor.goto_first_child();
+            let label = get_text(source, cursor);
+            writer.push_str(label);
+
+            // Node has an optional name
+            cursor.goto_next_sibling();
+            if cursor.node().kind() == ":" {
+                cursor.goto_next_sibling();
+                writer.push_str(": ");
+                writer.push_str(&get_text(source, cursor));
             }
 
-            cursor.goto_first_child();
-
-            // Node name and opening
-            let name = get_text(source, cursor);
-            writer.push_str(name);
             writer.push_str(" {\n");
 
             // Node body
@@ -173,7 +165,7 @@ fn traverse(
 
                 // When we find the keymap node, we need to set the keymap flag
                 // so we can properly print the binding cells.
-                let ctx = match name {
+                let ctx = match label {
                     "keymap" => ctx.keymap(),
                     _ => ctx,
                 };

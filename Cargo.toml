@@ -12,14 +12,11 @@ name = "dtsfmt"
 path = "src/lib.rs"
 
 [dependencies]
-clap = { version = "4.2.5", features = ["derive"] }
-console = "0.15.7"
-ignore = "0.4.20"
-serde = { version = "1.0", features = ["derive"] }
-similar = "2.2.1"
-toml = "0.7.6"
-tree-sitter = "0.20.10"
-
-[build-dependencies]
-cc="*"
-
+clap = { version = "4", features = ["derive"] }
+console = "0.15"
+ignore = "0.4"
+serde = { version = "1", features = ["derive"] }
+similar = "2"
+toml = "0.8"
+tree-sitter = "0.22"
+tree-sitter-devicetree = "0.10"
