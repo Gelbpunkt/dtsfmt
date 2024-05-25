@@ -162,15 +162,24 @@ fn traverse(
                     if cursor.node().kind() == "@" {
                         cursor.goto_next_sibling();
                         writer.push_str("@");
-                        writer
-                            .push_str(&get_text(source, cursor).to_lowercase());
+                        writer.push_str(
+                            &get_text(source, cursor)
+                                .to_lowercase()
+                                .trim_start_matches("0x")
+                                .trim_start_matches("0"),
+                        );
                     }
                 }
                 "@" => {
                     // Address
                     cursor.goto_next_sibling();
                     writer.push_str("@");
-                    writer.push_str(&get_text(source, cursor).to_lowercase());
+                    writer.push_str(
+                        &get_text(source, cursor)
+                            .to_lowercase()
+                            .trim_start_matches("0x")
+                            .trim_start_matches("0"),
+                    );
                 }
                 _ => {}
             }

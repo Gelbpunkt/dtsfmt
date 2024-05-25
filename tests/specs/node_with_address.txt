@@ -1,12 +1,12 @@
 == should format ==
-some_thing: something@0xDAFE {
+some_thing: something@0x0DAFE {
     port@4 {
       compatible = "hello,world";
     };
 };
 
 [expect]
-some_thing: something@0xdafe {
+some_thing: something@dafe {
   port@4 {
     compatible = "hello,world";
   };
