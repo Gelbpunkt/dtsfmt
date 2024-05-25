@@ -187,7 +187,9 @@ fn traverse(
             writer.push_str(name);
 
             cursor.goto_next_sibling();
-            writer.push_str(" = ");
+            if cursor.node().kind() != ";" {
+                writer.push_str(" = ");
+            }
 
             while cursor.goto_next_sibling() {
                 // When we are inside a bindings node, we want to increase the

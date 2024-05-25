@@ -1,0 +1,9 @@
+== should format ==
+hello: world {
+    some-property;
+};
+
+[expect]
+hello: world {
+  some-property;
+};
