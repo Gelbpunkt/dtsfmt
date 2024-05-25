@@ -1,0 +1,13 @@
+== should format ==
+some_thing: something@0xDAFE {
+    port@4 {
+      compatible = "hello,world";
+    };
+};
+
+[expect]
+some_thing: something@0xdafe {
+  port@4 {
+    compatible = "hello,world";
+  };
+};

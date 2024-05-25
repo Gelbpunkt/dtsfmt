@@ -151,10 +151,28 @@ fn traverse(
 
             // Node has an optional name
             cursor.goto_next_sibling();
-            if cursor.node().kind() == ":" {
-                cursor.goto_next_sibling();
-                writer.push_str(": ");
-                writer.push_str(&get_text(source, cursor));
+            match cursor.node().kind() {
+                ":" => {
+                    // Node name
+                    cursor.goto_next_sibling();
+                    writer.push_str(": ");
+                    writer.push_str(&get_text(source, cursor));
+                    // Optional address
+                    cursor.goto_next_sibling();
+                    if cursor.node().kind() == "@" {
+                        cursor.goto_next_sibling();
+                        writer.push_str("@");
+                        writer
+                            .push_str(&get_text(source, cursor).to_lowercase());
+                    }
+                }
+                "@" => {
+                    // Address
+                    cursor.goto_next_sibling();
+                    writer.push_str("@");
+                    writer.push_str(&get_text(source, cursor).to_lowercase());
+                }
+                _ => {}
             }
 
             writer.push_str(" {\n");
