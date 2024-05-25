@@ -1,3 +1,4 @@
+use crate::config::indentation::IndentationType;
 use crate::layouts::KeyboardLayout;
 
 pub struct Context<'a> {
@@ -5,6 +6,7 @@ pub struct Context<'a> {
     pub keymap: bool,
     pub bindings: bool,
     pub layout: &'a KeyboardLayout,
+    pub indentation_type: &'a IndentationType,
 }
 
 impl<'a> Context<'a> {

@@ -1,10 +1,13 @@
+use std::fmt::Display;
+use std::path::Path;
+
 use console::Style;
 use similar::{ChangeTag, TextDiff};
-use std::{fmt::Display, path::Path};
-
-use crate::{layouts::KeyboardLayoutType, printer::print};
 
 use super::get_specs_in_dir;
+use crate::config::indentation::IndentationType;
+use crate::layouts::KeyboardLayoutType;
+use crate::printer::print;
 
 struct FailedTestResult {
     expected: String,
@@ -48,7 +51,11 @@ pub fn run_specs(directory_path: &Path) {
     let mut failed_tests = Vec::new();
 
     for (_, spec) in specs {
-        let result = print(&spec.file_text, &KeyboardLayoutType::Adv360);
+        let result = print(
+            &spec.file_text,
+            &KeyboardLayoutType::Adv360,
+            &IndentationType::TwoSpaces,
+        );
 
         if result != spec.expected_text {
             failed_tests.push(FailedTestResult {

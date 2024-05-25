@@ -2,11 +2,17 @@ use std::collections::VecDeque;
 
 use tree_sitter::TreeCursor;
 
-use crate::{
-    context::Context,
-    layouts::{self, KeyboardLayoutType},
-    parser::parse,
-    utils::{get_text, lookahead, lookbehind, pad_right, print_indent, sep},
+use crate::config::indentation::IndentationType;
+use crate::context::Context;
+use crate::layouts::{self, KeyboardLayoutType};
+use crate::parser::parse;
+use crate::utils::{
+    get_text,
+    lookahead,
+    lookbehind,
+    pad_right,
+    print_indent,
+    sep,
 };
 
 fn is_preproc(n: &tree_sitter::Node) -> bool {
@@ -26,7 +32,8 @@ fn traverse(
 
     match node.kind() {
         "comment" => {
-            // Add a newline before the comment if the previous node is not a comment
+            // Add a newline before the comment if the previous node is not a
+            // comment
             if lookbehind(cursor).map_or(false, |n| n.kind() != "comment") {
                 sep(writer);
             }
@@ -147,8 +154,8 @@ fn traverse(
             cursor.goto_parent();
         }
         "node" => {
-            // If the previous node is a labeled_item, then the labeled_item will
-            // contain the indentation rather than the node.
+            // If the previous node is a labeled_item, then the labeled_item
+            // will contain the indentation rather than the node.
             if lookbehind(cursor).map_or(false, |n| n.kind() != ":") {
                 print_indent(writer, ctx);
             }
@@ -368,14 +375,23 @@ fn print_bindings(
     cursor.goto_parent();
 }
 
-pub fn print(source: &String, layout: &KeyboardLayoutType) -> String {
+pub fn print(
+    source: &String,
+    layout: &KeyboardLayoutType,
+    indentation_type: &IndentationType,
+) -> String {
     let mut writer = String::new();
     let tree = parse(source.clone());
     let mut cursor = tree.walk();
 
     let layout = layouts::get_layout(layout);
-    let ctx =
-        Context { indent: 0, bindings: false, keymap: false, layout: &layout };
+    let ctx = Context {
+        indent: 0,
+        bindings: false,
+        keymap: false,
+        layout: &layout,
+        indentation_type: indentation_type,
+    };
 
     // The first node is the root document node, so we have to traverse all it's
     // children with the same indentation level.

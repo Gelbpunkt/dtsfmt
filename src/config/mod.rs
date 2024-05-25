@@ -7,10 +7,12 @@ use crate::layouts::KeyboardLayoutType;
 use serde::Deserialize;
 
 mod constants;
+pub mod indentation;
 
 #[derive(Deserialize)]
 pub struct Config {
     pub layout: KeyboardLayoutType,
+    pub indentation: indentation::IndentationType,
 }
 
 impl Config {

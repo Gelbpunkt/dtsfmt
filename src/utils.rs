@@ -32,7 +32,7 @@ pub fn lookahead<'a>(cursor: &'a TreeCursor) -> Option<Node<'a>> {
 
 pub fn print_indent(writer: &mut String, ctx: &Context) {
     if let Ok(size) = ctx.indent.try_into() {
-        writer.push_str("  ".repeat(size).as_str());
+        writer.push_str(ctx.indentation_type.indent().repeat(size).as_str());
     }
 }
 
